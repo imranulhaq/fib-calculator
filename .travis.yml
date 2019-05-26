@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t imranulhaq/fibcalc -f ./client/Dockerfile.dev ./client-webapp
+  - docker build -t imranulhaq/fibcalc -f ./client-webapp/Dockerfile.dev ./client
 
 scripts:
   - docker run imranulhaq/fibcalc npm test -- --coverage
