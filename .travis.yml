@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t imranulhaq/fibcalc -f ./client/Dockerfile.dev ./client-webapp
+
+scripts:
+  - docker run imranulhaq/fibcalc npm test -- --coverage
+
+after_success:
+  - docker buld -t imranulhaq/fibcalc_multi_client ./client-webapp
+  - docker buld -t imranulhaq/fibcalc_multi_nginx ./nginx
+  - docker buld -t imranulhaq/fibcalc_multi_server ./exp-server
+  - docker buld -t imranulhaq/fibcalc_multi_worker ./worker
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  - docker push imranulhaq/fibcalc_multi_client
+  - docker push imranulhaq/fibcalc_multi_nginx
+  - docker push imranulhaq/fibcalc_multi_server
+  - docker push imranulhaq/fibcalc_multi_worker
